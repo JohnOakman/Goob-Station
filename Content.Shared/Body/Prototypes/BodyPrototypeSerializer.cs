@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared.Body.Organ;
 using Content.Shared.Prototypes;
 using Robust.Shared.Prototypes;
@@ -164,6 +164,12 @@ public sealed class BodyPrototypeSerializer : ITypeReader<BodyPrototype, Mapping
             allConnections.Add(slotId, (part, connections, organs));
         }
 
+        /* Goob edit
+         * This part is literally not used anywhere and fucks the "connections" list of the prototype by adding the parent of a limb to the list of connections.
+         * Reading the yaml, it is clear to me that "connections" represents a part => childpart relationship, not a parentpart <=> part <=> childpart.
+         * If you re-add it, it may fuck with my RegrowLimbsSystem.
+         * If you look for which part can host a "left leg", you will find both "torso" and "left foot" and now your code can't automatically figure out which part should contain which.
+         * why.......
         foreach (var (slotId, (_, connections, _)) in allConnections)
         {
             if (connections == null)
@@ -176,7 +182,7 @@ public sealed class BodyPrototypeSerializer : ITypeReader<BodyPrototype, Mapping
                 other.Connections.Add(slotId);
                 allConnections[connection] = other;
             }
-        }
+        }*/
 
         var slots = new Dictionary<string, BodyPrototypeSlot>();
 
